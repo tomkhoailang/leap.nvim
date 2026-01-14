@@ -5,9 +5,9 @@ local _local_1_ = require("leap.util")
 local get_horizontal_bounds = _local_1_["get-horizontal-bounds"]
 local get_cursor_pos = _local_1_["get-cursor-pos"]
 local api = vim.api
-local abs = math["abs"]
-local max = math["max"]
-local pow = math["pow"]
+local abs = math.abs
+local max = math.max
+local pow = math.pow
 local function get_match_positions(pattern, bounds, _2_)
   local backward_3f = _2_["backward?"]
   local whole_window_3f = _2_["whole-window?"]
@@ -81,8 +81,8 @@ local function get_match_positions(pattern, bounds, _2_)
 end
 local function get_targets_in_current_window(pattern, targets, kwargs)
   local backward_3f = kwargs["backward?"]
-  local offset = kwargs["offset"]
-  local inputlen = kwargs["inputlen"]
+  local offset = kwargs.offset
+  local inputlen = kwargs.inputlen
   local whole_window_3f = kwargs["whole-window?"]
   local skip_curpos_3f = kwargs["skip-curpos?"]
   local offset0 = (offset or 0)
@@ -178,10 +178,10 @@ local function rank(targets, cursor_positions, src_win)
 end
 local function get_targets(pattern, _24_)
   local backward_3f = _24_["backward?"]
-  local windows = _24_["windows"]
-  local offset = _24_["offset"]
+  local windows = _24_.windows
+  local offset = _24_.offset
   local op_mode_3f = _24_["op-mode?"]
-  local inputlen = _24_["inputlen"]
+  local inputlen = _24_.inputlen
   local whole_window_3f = windows
   local src_win = api.nvim_get_current_win()
   local windows0 = (windows or {src_win})

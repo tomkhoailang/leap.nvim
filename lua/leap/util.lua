@@ -69,8 +69,8 @@ local function get_char_keymapped(prompt)
       elseif (matching_rhs == candidate_rhs) then
         return accept(matching_rhs)
       else
-        local _4_, _5_ = get_char()
-        if (_4_ == _3cbs_3e) then
+        local case_4_, case_5_ = get_char()
+        if (case_4_ == _3cbs_3e) then
           local function _6_()
             if (_7cseq_7c >= 2) then
               return seq:sub(1, dec(_7cseq_7c))
@@ -79,7 +79,7 @@ local function get_char_keymapped(prompt)
             end
           end
           return loop(_6_())
-        elseif (_4_ == _3ccr_3e) then
+        elseif (case_4_ == _3ccr_3e) then
           if (matching_rhs ~= "") then
             return accept(matching_rhs)
           elseif (_7cseq_7c == 1) then
@@ -87,8 +87,8 @@ local function get_char_keymapped(prompt)
           else
             return loop(seq)
           end
-        elseif (nil ~= _4_) then
-          local ch = _4_
+        elseif (nil ~= case_4_) then
+          local ch = case_4_
           return loop((seq .. ch))
         else
           return nil
@@ -102,12 +102,12 @@ local function get_char_keymapped(prompt)
     return get_char()
   else
     echo_prompt()
-    local _11_ = loop(get_char())
-    if (nil ~= _11_) then
-      local input = _11_
+    local case_11_ = loop(get_char())
+    if (nil ~= case_11_) then
+      local input = case_11_
       return input, prompt0
     else
-      local _ = _11_
+      local _ = case_11_
       return echo("")
     end
   end

@@ -1,6 +1,6 @@
 -- Code generated from fnl/leap/opts.fnl - do not edit directly.
 
-local M = {default = {preview = true, equivalence_classes = {" \9\13\n"}, safe_labels = "sfnut/SFNLHMUGTZ?", labels = ("sfnjklhodweimbuyvrgtaqpcxz/" .. "SFNJKLHODWEIMBUYVRGTAQPCXZ?"), keys = {next_target = "<enter>", prev_target = "<backspace>", next_group = "<space>", prev_group = "<backspace>"}, vim_opts = {["wo.scrolloff"] = 0, ["wo.sidescrolloff"] = 0, ["wo.conceallevel"] = 0, ["bo.modeline"] = false}, case_sensitive = nil, max_highlighted_traversal_targets = 10, substitute_chars = {}, highlight_unlabeled_phase_one_targets = false}, current_call = {}}
+local M = {default = {preview = true, equivalence_classes = {" \t\r\n"}, safe_labels = "sfnut/SFNLHMUGTZ?", labels = ("sfnjklhodweimbuyvrgtaqpcxz/" .. "SFNJKLHODWEIMBUYVRGTAQPCXZ?"), keys = {next_target = "<enter>", prev_target = "<backspace>", next_group = "<space>", prev_group = "<backspace>"}, vim_opts = {["wo.scrolloff"] = 0, ["wo.sidescrolloff"] = 0, ["wo.conceallevel"] = 0, ["bo.modeline"] = false}, case_sensitive = nil, max_highlighted_traversal_targets = 10, substitute_chars = {}, highlight_unlabeled_phase_one_targets = false}, current_call = {}}
 local function _1_(self, key_2a)
   local key
   if (key_2a == "special_keys") then
@@ -20,11 +20,11 @@ local function _3_(self, key_2a)
     local _ = key_2a
     key = key_2a
   end
-  local _5_ = self.current_call[key]
-  if (_5_ == nil) then
+  local case_5_ = self.current_call[key]
+  if (case_5_ == nil) then
     return rawget(self.default, key)
-  elseif (nil ~= _5_) then
-    local val = _5_
+  elseif (nil ~= case_5_) then
+    local val = case_5_
     local and_6_ = (type(val) == "table") and not vim.isarray(val)
     if and_6_ then
       local _8_

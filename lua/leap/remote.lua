@@ -3,9 +3,9 @@
 local api = vim.api
 local function action(kwargs)
   local kwargs0 = (kwargs or {})
-  local jumper = kwargs0["jumper"]
-  local input = kwargs0["input"]
-  local use_count_3f = kwargs0["count"]
+  local jumper = kwargs0.jumper
+  local input = kwargs0.input
+  local use_count_3f = kwargs0.count
   local use_count_3f0 = (use_count_3f ~= false)
   local mode = vim.fn.mode(true)
   local state = {args = kwargs0, mode = mode, count = vim.v.count, register = vim.v.register}

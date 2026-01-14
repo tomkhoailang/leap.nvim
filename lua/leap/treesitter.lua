@@ -5,9 +5,9 @@ local function get_nodes()
   if not pcall(vim.treesitter.get_parser) then
     return nil, "No treesitter parser for this filetype."
   else
-    local _1_ = vim.treesitter.get_node()
-    if (nil ~= _1_) then
-      local node = _1_
+    local case_1_ = vim.treesitter.get_node()
+    if (nil ~= case_1_) then
+      local node = case_1_
       local nodes = {node}
       local parent = node:parent()
       while parent do
@@ -98,10 +98,10 @@ local function fill_cursor_pos(targets, start_idx)
   end
   local conflict_3f
   do
-    local _14_ = targets[start_idx]
-    if ((_G.type(_14_) == "table") and ((_G.type(_14_.pos) == "table") and (nil ~= _14_.pos[1]) and (nil ~= _14_.pos[2]))) then
-      local line_2a = _14_.pos[1]
-      local col_2a = _14_.pos[2]
+    local case_14_ = targets[start_idx]
+    if ((_G.type(case_14_) == "table") and ((_G.type(case_14_.pos) == "table") and (nil ~= case_14_.pos[1]) and (nil ~= case_14_.pos[2]))) then
+      local line_2a = case_14_.pos[1]
+      local col_2a = case_14_.pos[2]
       conflict_3f = ((line_2a == line) and (col_2a == col))
     else
       conflict_3f = nil
@@ -112,12 +112,12 @@ local function fill_cursor_pos(targets, start_idx)
     local loop_3f = true
     local idx = (start_idx + 1)
     while loop_3f do
-      local _16_ = targets[idx]
-      if (_16_ == nil) then
+      local case_16_ = targets[idx]
+      if (case_16_ == nil) then
         loop_3f = false
-      elseif ((_G.type(_16_) == "table") and ((_G.type(_16_.pos) == "table") and (nil ~= _16_.pos[1]) and true)) then
-        local line_2a = _16_.pos[1]
-        local _ = _16_.pos[2]
+      elseif ((_G.type(case_16_) == "table") and ((_G.type(case_16_.pos) == "table") and (nil ~= case_16_.pos[1]) and true)) then
+        local line_2a = case_16_.pos[1]
+        local _ = case_16_.pos[2]
         if (line_2a == line) then
           shift = (shift + 1)
           idx = (idx + 1)

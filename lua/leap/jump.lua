@@ -52,14 +52,14 @@ local function add_offset_21(offset)
   end
 end
 local function simulate_inclusive_op_21(mode)
-  local _7_ = vim.fn.matchstr(mode, "^no\\zs.")
-  if (_7_ == "") then
+  local case_7_ = vim.fn.matchstr(mode, "^no\\zs.")
+  if (case_7_ == "") then
     if cursor_before_eof_3f() then
       return push_beyond_eol_21()
     else
       return push_cursor_21("fwd")
     end
-  elseif (_7_ == "v") then
+  elseif (case_7_ == "v") then
     return push_cursor_21("bwd")
   else
     return nil
@@ -72,10 +72,10 @@ end
 local function jump_to_21(_10_, kwargs)
   local lnum = _10_[1]
   local col = _10_[2]
-  local win = kwargs["win"]
+  local win = kwargs.win
   local add_to_jumplist_3f = kwargs["add-to-jumplist?"]
-  local mode = kwargs["mode"]
-  local offset = kwargs["offset"]
+  local mode = kwargs.mode
+  local offset = kwargs.offset
   local backward_3f = kwargs["backward?"]
   local inclusive_3f = kwargs["inclusive?"]
   local op_mode_3f = mode:match("o")

@@ -4,10 +4,10 @@ local hl = require("leap.highlight")
 local opts = require("leap.opts")
 local api = vim.api
 local function set_beacon_to_match_hl(target)
-  local _let_1_ = target["chars"]
+  local _let_1_ = target.chars
   local ch1 = _let_1_[1]
   local ch2 = _let_1_[2]
-  local _let_2_ = target["pos"]
+  local _let_2_ = target.pos
   local _ = _let_2_[1]
   local col = _let_2_[2]
   local extmark_opts
@@ -20,7 +20,7 @@ local function set_beacon_to_match_hl(target)
   return nil
 end
 local function get_label_offset(target)
-  local _let_4_ = target["chars"]
+  local _let_4_ = target.chars
   local ch1 = _let_4_[1]
   local ch2 = _let_4_[2]
   local _5_
@@ -68,7 +68,7 @@ end
 local function set_beacons(targets, _11_)
   local group_offset = _11_["group-offset"]
   local use_no_labels_3f = _11_["use-no-labels?"]
-  local phase = _11_["phase"]
+  local phase = _11_.phase
   if use_no_labels_3f then
     if targets[1].chars then
       for _, target in ipairs(targets) do
@@ -111,8 +111,8 @@ local function resolve_conflicts(targets)
   for _, target in ipairs(targets) do
     local empty_line_3f = ((target.chars[1] == "") and (target.pos[2] == 0))
     if not empty_line_3f then
-      local buf = target.wininfo["bufnr"]
-      local win = target.wininfo["winid"]
+      local buf = target.wininfo.bufnr
+      local win = target.wininfo.winid
       local lnum = target.pos[1]
       local col_ch1 = target.pos[2]
       local col_ch2 = (col_ch1 + string.len(target.chars[1]))
@@ -122,7 +122,7 @@ local function resolve_conflicts(targets)
         local col_label = (col_ch1 + label_offset)
         local shifted_label_3f = (col_label == col_ch2)
         do
-          local _17_
+          local case_17_
           local or_18_ = label_positions[(key_prefix .. col_label)]
           if not or_18_ then
             if shifted_label_3f then
@@ -134,9 +134,9 @@ local function resolve_conflicts(targets)
           if not or_18_ then
             or_18_ = unlabeled_match_positions[(key_prefix .. col_label)]
           end
-          _17_ = or_18_
-          if (nil ~= _17_) then
-            local other = _17_
+          case_17_ = or_18_
+          if (nil ~= case_17_) then
+            local other = case_17_
             other.beacon = nil
             set_beacon_to_concealed_label(target)
           else
@@ -146,7 +146,7 @@ local function resolve_conflicts(targets)
       else
         local col_ch3 = (col_ch2 + string.len(target.chars[2]))
         do
-          local _21_
+          local case_21_
           local or_22_ = label_positions[(key_prefix .. col_ch1)]
           if not or_22_ then
             or_22_ = label_positions[(key_prefix .. col_ch2)]
@@ -154,9 +154,9 @@ local function resolve_conflicts(targets)
           if not or_22_ then
             or_22_ = label_positions[(key_prefix .. col_ch3)]
           end
-          _21_ = or_22_
-          if (nil ~= _21_) then
-            local other = _21_
+          case_21_ = or_22_
+          if (nil ~= case_21_) then
+            local other = case_21_
             target.beacon = nil
             set_beacon_to_concealed_label(other)
           else
