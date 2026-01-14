@@ -18,6 +18,7 @@ luafiles = get_files(LUA_ROOT + "/")
 
 # Compile source files which have been created or modified since the
 # last build.
+
 changes = False
 for src in fnlfiles:
     out = src.replace(FNL_ROOT, LUA_ROOT, 1).replace('.fnl', '.lua')
@@ -37,16 +38,22 @@ if not changes:
     print("nothing to compile")
 
 # Remove leftover files whose sources have been deleted.
+
+SKIP = [
+    'lua/leap/user.lua',
+]
+
 for out in luafiles:
-    if out not in map(lambda f: f
-            .replace(FNL_ROOT, LUA_ROOT, 1)
-            .replace('.fnl', '.lua'),
-            fnlfiles):
-        print("removing output file with missing source: " + out)
-        os.remove(out)
-        # Remove parent directories if they have become empty.
-        try:
-            os.removedirs(os.path.dirname(out))
-        except OSError:
-            pass
+    if out not in SKIP:
+        if out not in map(lambda f: f
+                .replace(FNL_ROOT, LUA_ROOT, 1)
+                .replace('.fnl', '.lua'),
+                fnlfiles):
+            print("removing output file with missing source: " + out)
+            os.remove(out)
+            # Remove parent directories if they have become empty.
+            try:
+                os.removedirs(os.path.dirname(out))
+            except OSError:
+                pass
 
