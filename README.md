@@ -525,12 +525,22 @@ end
 <details>
 <summary>Grey out the search area ("backdrop" highlight)</summary>
 
-Set the `LeapBackdrop` highlight group (usually linking to `Comment` is
-preferable):
+There is a helper function for that in the `user` module:
 
 ```lua
-vim.api.nvim_set_hl(0, 'LeapBackdrop', { link = 'Comment' })
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = vim.api.nvim_create_augroup('LeapBackdrop', {}),
+  callback = function ()
+    if vim.g.colors_name == 'this_color_scheme_needs_backdrop' then
+      require('leap.user').set_backdrop_highlight('Comment')
+    end
+  end
+})
 ```
+
+NOTE: This is intended as an opt-in feature for end users. Color scheme plugins
+should make sure that the labels are clearly visible as they are, and should
+not rely on "greywashing" by default.
 
 </details>
 
@@ -546,8 +556,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   callback = function ()
     if vim.g.colors_name == 'bad_color_scheme' then
       -- Forces using the defaults: sets `IncSearch` for labels,
-      -- `Search` for matches, removes `LeapBackdrop`, and updates the
-      -- look of concealed labels.
+      -- `Search` for matches, and updates the look of concealed labels.
       require('leap').init_hl(true)
     end
   end

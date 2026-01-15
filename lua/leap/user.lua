@@ -63,6 +63,81 @@ local function get_focusable_windows()
    return require('leap.util').get_focusable_windows()
 end
 
+local set_backdrop_highlight
+do
+   local function highlight_ranges_for_redraw_cycle(hl_group, ranges)
+      local ns = vim.api.nvim_create_namespace('')
+
+      for buf, range in pairs(ranges) do
+         vim.hl.range(buf, ns, hl_group, range[1], range[2])
+      end
+
+      -- Set auto-cleanup.
+      vim.api.nvim_create_autocmd('User', {
+         pattern = { 'LeapRedraw', 'LeapLeave' },
+         once = true,
+         callback = function()
+            for buf, range in pairs(ranges) do
+               if vim.api.nvim_buf_is_valid(buf) then
+                  vim.api.nvim_buf_clear_namespace(buf, ns, range[1][1], range[2][1])
+               end
+               -- Safety measure for scrolloff > 0: we always clean up
+               -- the current view too.
+               vim.api.nvim_buf_clear_namespace(
+                  0, ns, vim.fn.line('w0') - 1, vim.fn.line('w$')
+               )
+            end
+         end,
+      })
+      -- When used as an autocmd callback, a truthy return value would
+      -- remove the autocommand (:h nvim_create_autocmd).
+      return nil
+   end
+
+   local function get_search_ranges()
+      local ranges = {}
+      local args = require('leap').state.args
+      local windows = args.windows or args.target_windows  -- deprecated
+
+      if windows then
+         for _, win in ipairs(windows) do
+            local wininfo = vim.fn.getwininfo(win)[1]
+            local buf = wininfo.bufnr
+            ranges[buf] = { { wininfo.topline - 1, 0 }, { wininfo.botline - 1, -1 } }
+         end
+      else
+         local wininfo = vim.fn.getwininfo(vim.fn.win_getid())[1]
+         local buf = wininfo.bufnr
+         local curline = vim.fn.line('.') - 1
+         local curcol = vim.fn.col('.') - 1
+         if args.backward then
+            ranges[buf] = { { wininfo.topline - 1, 0 }, { curline, curcol } }
+         else
+            ranges[buf] = { { curline, curcol + 1 }, { wininfo.botline - 1, -1 } }
+         end
+      end
+
+      return ranges
+   end
+
+   --- Applies `hl_group` to all search ranges. Disabled on color scheme change.
+   set_backdrop_highlight = function(hl_group)
+      local group = vim.api.nvim_create_augroup('LeapBackdrop', {})
+      local id = vim.api.nvim_create_autocmd('User', {
+         pattern = 'LeapRedraw',
+         group = group,
+         callback = function()
+            highlight_ranges_for_redraw_cycle(hl_group, get_search_ranges())
+         end,
+      })
+      vim.api.nvim_create_autocmd('ColorScheme', {
+         once = true,
+         group = group,
+         callback = function() vim.api.nvim_del_autocmd(id) end,
+      })
+   end
+end
+
 --- @deprecated
 local function add_default_mappings(force)
    for _, t in ipairs {
@@ -100,6 +175,7 @@ return {
    set_repeat_keys = set_repeat_keys,
    get_enterable_windows = get_enterable_windows,
    get_focusable_windows = get_focusable_windows,
+   set_backdrop_highlight = set_backdrop_highlight,
    -- deprecated --
    add_repeat_mappings = set_repeat_keys,
    add_default_mappings = add_default_mappings,

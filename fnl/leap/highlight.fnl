@@ -5,53 +5,9 @@
 
 (local M {:group {:label "LeapLabel"
                   :label-dimmed "LeapLabelDimmed"
-                  :match "LeapMatch"
-                  :backdrop "LeapBackdrop"}
+                  :match "LeapMatch"}
           :priority {:label 65535
                      :backdrop 65534}})
-
-
-(fn get-search-ranges []
-  (local ranges [])
-  (local args (. (require "leap") :state :args))
-  (local windows (or args.windows
-                     args.target_windows))  ; deprecated
-  (if windows
-      (each [_ win (ipairs windows)]
-        (local wininfo (. (vim.fn.getwininfo win) 1))
-        (set (. ranges wininfo.bufnr) [[(- wininfo.topline 1) 0]
-                                       [(- wininfo.botline 1) -1]]))
-      (let [curline (- (vim.fn.line ".") 1)
-            curcol (- (vim.fn.col ".") 1)
-            wininfo (. (vim.fn.getwininfo (vim.fn.win_getid)) 1)]
-        (set (. ranges wininfo.bufnr)
-             (if args.backward
-                 [[(- wininfo.topline 1) 0] [curline curcol]]
-                 [[curline (+ curcol 1)] [(- wininfo.botline 1) -1]]))))
-  ranges)
-
-
-(fn apply-backdrop [ranges higroup]
-  (local ns (vim.api.nvim_create_namespace ""))
-  (each [buf [start finish] (pairs ranges)]
-    (if (= (vim.fn.has "nvim-0.11") 1)
-        (vim.hl.range buf ns higroup start finish)
-        (vim.highlight.range buf ns higroup start finish)))
-  (vim.api.nvim_create_autocmd "User"
-    {:pattern ["LeapRedraw" "LeapLeave"]
-     :once true
-     :callback
-     (fn []
-       (each [buf [start finish] (pairs ranges)]
-         (when (api.nvim_buf_is_valid buf)
-           (vim.api.nvim_buf_clear_namespace buf ns (. start 1) (. finish 1))))
-       ; Safety measure for scrolloff > 0: we always clean up the
-       ; current view too.
-       (vim.api.nvim_buf_clear_namespace
-         0 ns (- (vim.fn.line "w0") 1) (vim.fn.line "w$")))})
-  ; When used as an autocmd callback, a truthy return value would remove
-  ; the autocommand itself (:h nvim_create_autocmd).
-  nil)
 
 
 (fn ->rgb [n]  ; n=(r+g+b), as returned by `nvim_get_hl`
@@ -145,21 +101,11 @@
     (set-label-dimmed)
     (set-concealed-label-char)
 
-    (local has-backdrop-group? (not
-                                 (vim.tbl_isempty
-                                   (api.nvim_get_hl
-                                     0 {:name self.group.backdrop}))))
-    (when has-backdrop-group?
+    ; Handle `LeapBackdrop` (deprecated).
+    (when (not (vim.tbl_isempty (api.nvim_get_hl 0 {:name "LeapBackdrop"})))
       (if force?
-          (vim.api.nvim_set_hl 0 self.group.backdrop {:link "None"})
-          ; Note: The autocommand will not be removed on a subsequent
-          ; `force?`d call (it will apply None to the areas).
-          (api.nvim_create_autocmd "User"
-            {:pattern ["LeapRedraw"]
-             :group (api.nvim_create_augroup "LeapDefault_Backdrop" {})
-             :callback (fn []
-                         (apply-backdrop
-                           (get-search-ranges) self.group.backdrop))})))))
-
+          (vim.api.nvim_set_hl 0 "LeapBackdrop" {:link "None"})
+          (let [user (require "leap.user")]
+            (user.set_backdrop_highlight "LeapBackdrop"))))))
 
 M

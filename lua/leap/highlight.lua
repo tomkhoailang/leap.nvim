@@ -2,53 +2,7 @@
 
 local opts = require("leap.opts")
 local api = vim.api
-local M = {group = {label = "LeapLabel", ["label-dimmed"] = "LeapLabelDimmed", match = "LeapMatch", backdrop = "LeapBackdrop"}, priority = {label = 65535, backdrop = 65534}}
-local function get_search_ranges()
-  local ranges = {}
-  local args = require("leap").state.args
-  local windows = (args.windows or args.target_windows)
-  if windows then
-    for _, win in ipairs(windows) do
-      local wininfo = vim.fn.getwininfo(win)[1]
-      ranges[wininfo.bufnr] = {{(wininfo.topline - 1), 0}, {(wininfo.botline - 1), -1}}
-    end
-  else
-    local curline = (vim.fn.line(".") - 1)
-    local curcol = (vim.fn.col(".") - 1)
-    local wininfo = vim.fn.getwininfo(vim.fn.win_getid())[1]
-    if args.backward then
-      ranges[wininfo.bufnr] = {{(wininfo.topline - 1), 0}, {curline, curcol}}
-    else
-      ranges[wininfo.bufnr] = {{curline, (curcol + 1)}, {(wininfo.botline - 1), -1}}
-    end
-  end
-  return ranges
-end
-local function apply_backdrop(ranges, higroup)
-  local ns = vim.api.nvim_create_namespace("")
-  for buf, _3_ in pairs(ranges) do
-    local start = _3_[1]
-    local finish = _3_[2]
-    if (vim.fn.has("nvim-0.11") == 1) then
-      vim.hl.range(buf, ns, higroup, start, finish)
-    else
-      vim.highlight.range(buf, ns, higroup, start, finish)
-    end
-  end
-  local function _5_()
-    for buf, _6_ in pairs(ranges) do
-      local start = _6_[1]
-      local finish = _6_[2]
-      if api.nvim_buf_is_valid(buf) then
-        vim.api.nvim_buf_clear_namespace(buf, ns, start[1], finish[1])
-      else
-      end
-    end
-    return vim.api.nvim_buf_clear_namespace(0, ns, (vim.fn.line("w0") - 1), vim.fn.line("w$"))
-  end
-  vim.api.nvim_create_autocmd("User", {pattern = {"LeapRedraw", "LeapLeave"}, once = true, callback = _5_})
-  return nil
-end
+local M = {group = {label = "LeapLabel", ["label-dimmed"] = "LeapLabelDimmed", match = "LeapMatch"}, priority = {label = 65535, backdrop = 65534}}
 local function __3ergb(n)
   local r = math.floor((n / 65536))
   local g = math.floor(((n / 256) % 256))
@@ -94,27 +48,27 @@ local custom_def_maps = {["leap-label-default-light"] = {fg = "#eef1f0", bg = "#
 M.init = function(self, force_3f)
   local custom_defaults_3f = ((vim.g.colors_name == "default") or vim.g.vscode)
   local defaults
-  local _11_
+  local _4_
   if custom_defaults_3f then
     if (vim.o.background == "light") then
-      _11_ = custom_def_maps["leap-label-default-light"]
+      _4_ = custom_def_maps["leap-label-default-light"]
     else
-      _11_ = custom_def_maps["leap-label-default-dark"]
+      _4_ = custom_def_maps["leap-label-default-dark"]
     end
   else
-    _11_ = {link = "IncSearch"}
+    _4_ = {link = "IncSearch"}
   end
-  local _14_
+  local _7_
   if custom_defaults_3f then
     if (vim.o.background == "light") then
-      _14_ = custom_def_maps["leap-match-default-light"]
+      _7_ = custom_def_maps["leap-match-default-light"]
     else
-      _14_ = custom_def_maps["leap-match-default-dark"]
+      _7_ = custom_def_maps["leap-match-default-dark"]
     end
   else
-    _14_ = {link = "Search"}
+    _7_ = {link = "Search"}
   end
-  defaults = {[self.group.label] = _11_, [self.group.match] = _14_}
+  defaults = {[self.group.label] = _4_, [self.group.match] = _7_}
   for group_name, def_map in pairs(vim.deepcopy(defaults)) do
     if not force_3f then
       def_map.default = true
@@ -124,15 +78,12 @@ M.init = function(self, force_3f)
   end
   set_label_dimmed()
   set_concealed_label_char()
-  local has_backdrop_group_3f = not vim.tbl_isempty(api.nvim_get_hl(0, {name = self.group.backdrop}))
-  if has_backdrop_group_3f then
+  if not vim.tbl_isempty(api.nvim_get_hl(0, {name = "LeapBackdrop"})) then
     if force_3f then
-      return vim.api.nvim_set_hl(0, self.group.backdrop, {link = "None"})
+      return vim.api.nvim_set_hl(0, "LeapBackdrop", {link = "None"})
     else
-      local function _18_()
-        return apply_backdrop(get_search_ranges(), self.group.backdrop)
-      end
-      return api.nvim_create_autocmd("User", {pattern = {"LeapRedraw"}, group = api.nvim_create_augroup("LeapDefault_Backdrop", {}), callback = _18_})
+      local user = require("leap.user")
+      return user.set_backdrop_highlight("LeapBackdrop")
     end
   else
     return nil
