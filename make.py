@@ -40,6 +40,7 @@ if not changes:
 # Remove leftover files whose sources have been deleted.
 
 SKIP = [
+    'lua/leap/init.lua',
     'lua/leap/remote.lua',
     'lua/leap/treesitter.lua',
     'lua/leap/user.lua',
