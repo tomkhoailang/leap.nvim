@@ -41,6 +41,7 @@ if not changes:
 
 SKIP = [
     'lua/leap/init.lua',
+    'lua/leap/opts.lua',
     'lua/leap/remote.lua',
     'lua/leap/treesitter.lua',
     'lua/leap/user.lua',
