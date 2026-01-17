@@ -8,11 +8,9 @@
         : light-up-beacons}
         (require "leap.beacons"))
 
-(local {: clamp
-        : echo
-        : get-char
-        : get-char-keymapped}
-       (require "leap.util"))
+(local {:get_char get-char
+        :get_char_keymapped get-char-keymapped}
+       (require "leap.input"))
 
 (local api vim.api)
 ; Use these to handle multibyte characters.
@@ -31,6 +29,11 @@
 
 
 ; Utils ///1
+
+(fn clamp [x min max] (if (< x min) min (> x max) max x))
+
+(fn echo [msg] (api.nvim_echo [[msg]] false []))
+
 
 (fn handle-interrupted-change-op! []
   "Return to Normal mode and restore the cursor position after an
