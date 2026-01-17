@@ -43,10 +43,10 @@
                   [[(.. label pad) hl.group.label]]
 
                   (= relative-group 2)
-                  [[(.. opts.concealed_label pad) hl.group.label-dimmed]]
+                  [[(.. opts.concealed_label pad) hl.group.label_dimmed]]
 
                   (and (> relative-group 2) show-all?)
-                  [[(.. opts.concealed_label pad) hl.group.label-dimmed]])]
+                  [[(.. opts.concealed_label pad) hl.group.label_dimmed]])]
     ; Set nil too (= switching off a beacon).
     (set target.beacon (when vtext [offset {:virt_text vtext}]))))
 
