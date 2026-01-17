@@ -14,7 +14,7 @@ local plug_mappings = {
       '<Plug>(leap-from-window)',
       function ()
          require('leap').leap {
-            windows = require('leap.util').get_enterable_windows()
+            windows = require('leap.user').get_enterable_windows()
          }
       end
    },
@@ -23,7 +23,7 @@ local plug_mappings = {
       '<Plug>(leap-anywhere)',
       function ()
          require('leap').leap {
-            windows = require('leap.util').get_focusable_windows()
+            windows = require('leap.user').get_focusable_windows()
          }
       end
    },
@@ -48,7 +48,6 @@ local plug_mappings = {
       function () require('leap').leap { backward = true, offset = 1 } end
    },
 }
-
 
 for _, t in ipairs(plug_mappings) do
    local modes, lhs, rhs = unpack(t)

@@ -35,7 +35,7 @@ local function action(kwargs)
       -- the jumper.
       local no_autojump = (input and #input > 0) or state.mode ~= 'n'
       require('leap').leap {
-         windows = require('leap.util').get_focusable_windows(),
+         windows = require('leap.user').get_focusable_windows(),
          opts = no_autojump and { safe_labels = '' } or nil,
       }
    end

@@ -16,18 +16,6 @@ end
 local function get_cursor_pos()
   return {vim.fn.line("."), vim.fn.col(".")}
 end
-local function get_enterable_windows()
-  local wins = api.nvim_tabpage_list_wins(0)
-  local curr_win = api.nvim_get_current_win()
-  local function _2_(_241)
-    local config = api.nvim_win_get_config(_241)
-    return (config.focusable and (config.relative == "") and (_241 ~= curr_win))
-  end
-  return vim.tbl_filter(_2_, wins)
-end
-local function get_focusable_windows()
-  return {vim.api.nvim_get_current_win(), unpack(get_enterable_windows())}
-end
 local function get_horizontal_bounds()
   local window_width = api.nvim_win_get_width(0)
   local textoff = vim.fn.getwininfo(api.nvim_get_current_win())[1].textoff
@@ -69,17 +57,17 @@ local function get_char_keymapped(prompt)
       elseif (matching_rhs == candidate_rhs) then
         return accept(matching_rhs)
       else
-        local case_4_, case_5_ = get_char()
-        if (case_4_ == _3cbs_3e) then
-          local function _6_()
+        local case_3_, case_4_ = get_char()
+        if (case_3_ == _3cbs_3e) then
+          local function _5_()
             if (_7cseq_7c >= 2) then
               return seq:sub(1, dec(_7cseq_7c))
             else
               return seq
             end
           end
-          return loop(_6_())
-        elseif (case_4_ == _3ccr_3e) then
+          return loop(_5_())
+        elseif (case_3_ == _3ccr_3e) then
           if (matching_rhs ~= "") then
             return accept(matching_rhs)
           elseif (_7cseq_7c == 1) then
@@ -87,8 +75,8 @@ local function get_char_keymapped(prompt)
           else
             return loop(seq)
           end
-        elseif (nil ~= case_4_) then
-          local ch = case_4_
+        elseif (nil ~= case_3_) then
+          local ch = case_3_
           return loop((seq .. ch))
         else
           return nil
@@ -102,14 +90,14 @@ local function get_char_keymapped(prompt)
     return get_char()
   else
     echo_prompt()
-    local case_11_ = loop(get_char())
-    if (nil ~= case_11_) then
-      local input = case_11_
+    local case_10_ = loop(get_char())
+    if (nil ~= case_10_) then
+      local input = case_10_
       return input, prompt0
     else
-      local _ = case_11_
+      local _ = case_10_
       return echo("")
     end
   end
 end
-return {clamp = clamp, echo = echo, ["get-cursor-pos"] = get_cursor_pos, get_enterable_windows = get_enterable_windows, get_focusable_windows = get_focusable_windows, ["get-horizontal-bounds"] = get_horizontal_bounds, ["get-char"] = get_char, ["get-char-keymapped"] = get_char_keymapped}
+return {clamp = clamp, echo = echo, ["get-cursor-pos"] = get_cursor_pos, ["get-horizontal-bounds"] = get_horizontal_bounds, ["get-char"] = get_char, ["get-char-keymapped"] = get_char_keymapped}

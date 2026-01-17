@@ -13,22 +13,6 @@
   [(vim.fn.line ".") (vim.fn.col ".")])
 
 
-(fn get-enterable-windows []
-  (let [wins (api.nvim_tabpage_list_wins 0)
-        curr-win (api.nvim_get_current_win)]
-    (vim.tbl_filter
-      #(let [config (api.nvim_win_get_config $)]
-         (and config.focusable
-              ; Exclude auto-closing hover popups (e.g. LSP) (#137).
-              (= config.relative "")
-              (not= $ curr-win)))
-      wins)))
-
-
-(fn get-focusable-windows []
-  [(vim.api.nvim_get_current_win) (unpack (get-enterable-windows))])
-
-
 (fn get-horizontal-bounds []
   "Return the first an last visible virtual column of the editable
 window area.
@@ -129,8 +113,6 @@ sequenced."
 {: clamp
  : echo
  : get-cursor-pos
- :get_enterable_windows get-enterable-windows
- :get_focusable_windows get-focusable-windows
  : get-horizontal-bounds
  : get-char
  : get-char-keymapped}

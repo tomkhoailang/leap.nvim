@@ -56,11 +56,18 @@ local function set_repeat_keys(fwd_key, bwd_key, kwargs)
 end
 
 local function get_enterable_windows()
-   return require('leap.util').get_enterable_windows()
+   return vim.iter(vim.api.nvim_tabpage_list_wins(0))
+      :filter(function(win)
+         local config = vim.api.nvim_win_get_config(win)
+         return config.focusable
+            -- Exclude auto-closing hover popups, e.g. diagnostics (#137).
+            and config.relative == ""
+            and win ~= vim.api.nvim_get_current_win()
+      end):totable()
 end
 
 local function get_focusable_windows()
-   return require('leap.util').get_focusable_windows()
+   return { vim.api.nvim_get_current_win(), unpack(get_enterable_windows()) }
 end
 
 local set_backdrop_highlight
