@@ -3,10 +3,10 @@
 (local hl (require "leap.highlight"))
 (local opts (require "leap.opts"))
 
-(local {: set-beacons
-        : resolve-conflicts
-        : light-up-beacons}
-        (require "leap.beacons"))
+(local {:set_beacons set-beacons
+        :resolve_conflicts resolve-conflicts
+        :light_up_beacons light-up-beacons}
+       (require "leap.beacons"))
 
 (local {:get_char get-char
         :get_char_keymapped get-char-keymapped}
