@@ -41,6 +41,10 @@ local custom_def_maps = {
    },
 }
 
+local function get_hl(name)
+   return api.nvim_get_hl(0, { name = name, link = false })
+end
+
 local function to_rgb(n)
    local r = math.floor((n / 65536))
    local g = math.floor(((n / 256) % 256))
@@ -59,7 +63,7 @@ end
 
 local function dimmed(def_map_)
    local def_map = vim.deepcopy(def_map_)
-   local normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
+   local normal = get_hl('Normal')
    -- `bg` can be nil (transparent background), and e.g. the old default
    -- color scheme (`vim`) does not define Normal at all.
    -- Also, `nvim_get_hl()` apparently does not guarantee to return
@@ -76,13 +80,13 @@ local function dimmed(def_map_)
 end
 
 local function set_label_dimmed()
-   local label = vim.api.nvim_get_hl(0, { name = M.group.label, link = false })
+   local label = get_hl(M.group.label)
    local label_dimmed = dimmed(label)
-   vim.api.nvim_set_hl(0, M.group.label_dimmed, label_dimmed)
+   api.nvim_set_hl(0, M.group.label_dimmed, label_dimmed)
 end
 
 local function set_concealed_label_char()
-   local label = api.nvim_get_hl(0, { name = M.group.label, link = false })
+   local label = get_hl(M.group.label)
    local middle_dot = '\194\183'
    -- Undocumented option, might be exposed in the future.
    opts.concealed_label = label.bg and ' ' or middle_dot
@@ -100,7 +104,17 @@ function M.init(self, force)
       defaults[self.group.match] =
          custom_def_maps[vim.o.bg == 'light' and 'match_light' or 'match_dark']
    else
-      defaults[self.group.label] = { link = 'IncSearch' }
+      local search_hl = get_hl('Search')
+
+      defaults[self.group.label] =
+         not vim.deep_equal(search_hl, get_hl('IncSearch'))
+         and { link = 'IncSearch' }
+         or not vim.deep_equal(search_hl, get_hl('CurSearch'))
+         and { link = 'CurSearch' }
+         or not vim.deep_equal(search_hl, get_hl('Substitute'))
+         and { link = 'Substitue' }
+         or custom_def_maps[vim.o.bg == 'light' and 'label_light' or 'label_dark']
+
       defaults[self.group.match] = { link = 'Search' }
    end
 
@@ -116,9 +130,9 @@ function M.init(self, force)
    set_concealed_label_char()
 
    -- Handle `LeapBackdrop` (deprecated).
-   if not vim.tbl_isempty(api.nvim_get_hl(0, { name = 'LeapBackdrop' })) then
+   if not vim.tbl_isempty(get_hl('LeapBackdrop')) then
       if force then
-         vim.api.nvim_set_hl(0, 'LeapBackdrop', { link = 'None' })
+         api.nvim_set_hl(0, 'LeapBackdrop', { link = 'None' })
       else
          require('leap.user').set_backdrop_highlight('LeapBackdrop')
       end
