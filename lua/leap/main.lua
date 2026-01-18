@@ -775,7 +775,7 @@ local function leap(kwargs)
     local first_jump_3f = true
     local function _118_(target)
       local jump = require("leap.jump")
-      jump["jump-to!"](target.pos, {win = target.wininfo.winid, ["add-to-jumplist?"] = first_jump_3f, mode = mode, offset = offset, ["backward?"] = (backward_3f or (target.idx and (target.idx < 0))), ["inclusive?"] = inclusive_3f})
+      jump.jump_to(target.pos, {win = target.wininfo.winid, add_to_jumplist = first_jump_3f, mode = mode, offset = offset, is_backward = (backward_3f or (target.idx and (target.idx < 0))), is_inclusive = inclusive_3f})
       first_jump_3f = false
       return nil
     end

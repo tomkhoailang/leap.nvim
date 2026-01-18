@@ -714,14 +714,14 @@ char.
       (var first-jump? true)
       (fn [target]
         (local jump (require "leap.jump"))
-        (jump.jump-to! target.pos
-                       {:win target.wininfo.winid
-                        :add-to-jumplist? first-jump?
-                        : mode
-                        : offset
-                        :backward? (or backward?
-                                       (and target.idx (< target.idx 0)))
-                        : inclusive?})
+        (jump.jump_to target.pos
+                      {:win target.wininfo.winid
+                       :add_to_jumplist first-jump?
+                       : mode
+                       : offset
+                       :is_backward (or backward?
+                                        (and target.idx (< target.idx 0)))
+                       :is_inclusive inclusive?})
         (set first-jump? false))))
 
   (local do-action (or user-given-action jump-to!))
