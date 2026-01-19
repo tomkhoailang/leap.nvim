@@ -251,7 +251,7 @@ local function prepare_labeled_targets(targets, kwargs)
   end
   local function first_covers_label_of_second_3f(targets0)
     local t1,t2 = targets0[1], targets0[2]
-    if (t2 and t2.chars and not t2["offscreen?"]) then
+    if (t2 and t2.chars and not t2.is_offscreen) then
       local _let_39_ = t1.pos
       local line1 = _let_39_[1]
       local col1 = _let_39_[2]
@@ -264,7 +264,7 @@ local function prepare_labeled_targets(targets, kwargs)
     end
   end
   local function first_offscreen_3f(targets0)
-    return ((#targets0 > 1) and targets0[1]["offscreen?"])
+    return ((#targets0 > 1) and targets0[1].is_offscreen)
   end
   local function _43_()
     if can_traverse_3f then
@@ -290,7 +290,7 @@ local function prepare_labeled_targets(targets, kwargs)
     local count = 0
     for _, t in ipairs(targets0) do
       if (count > limit) then break end
-      if not t["offscreen?"] then
+      if not t.is_offscreen then
         count = (count + 1)
       else
       end
@@ -331,7 +331,7 @@ local function prepare_labeled_targets(targets, kwargs)
       local target = targets0[i]
       if target then
         local i_2a = (i - skipped)
-        if target["offscreen?"] then
+        if target.is_offscreen then
           skipped = (skipped + 1)
         else
           local case_51_ = (i_2a % _7clabels_7c)
@@ -702,8 +702,8 @@ local function leap(kwargs)
       errmsg = "no targets"
     end
     local search = require("leap.search")
-    local kwargs0 = {["backward?"] = backward_3f, windows = windows, offset = offset, ["op-mode?"] = op_mode_3f, inputlen = inputlen0}
-    local targets = search["get-targets"](pattern, kwargs0)
+    local kwargs0 = {is_backward = backward_3f, windows = windows, offset = offset, is_op_mode = op_mode_3f, inputlen = inputlen0}
+    local targets = search.get_targets(pattern, kwargs0)
     local or_111_ = targets
     if not or_111_ then
       st.errmsg = errmsg

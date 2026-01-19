@@ -47,6 +47,7 @@ SKIP = [
     'lua/leap/jump.lua',
     'lua/leap/opts.lua',
     'lua/leap/remote.lua',
+    'lua/leap/search.lua',
     'lua/leap/treesitter.lua',
     'lua/leap/user.lua',
 ]

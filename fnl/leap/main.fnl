@@ -261,14 +261,14 @@ char.
   ; code.
   (fn first-covers-label-of-second? [targets]
     (local [t1 t2] [(. targets 1) (. targets 2)])
-    (when (and t2 t2.chars (not t2.offscreen?))
+    (when (and t2 t2.chars (not t2.is_offscreen))
       (let [{:pos [line1 col1]} t1
             {:pos [line2 col2]} t2]
         (and (= line1 line2)
              (= col1 (+ col2 (length (table.concat t2.chars))))))))
 
   (fn first-offscreen? [targets]
-    (and (> (length targets) 1) (. targets 1 :offscreen?)))
+    (and (> (length targets) 1) (. targets 1 :is_offscreen)))
 
   (local [labels safe-labels] (if can-traverse?
                                   (vim.tbl_map #(as-traversable
@@ -283,7 +283,7 @@ char.
     (local limit (+ (length safe-labels) 1))
     (var count 0)
     (each [_ t (ipairs targets) &until (> count limit)]
-      (when-not t.offscreen?
+      (when-not t.is_offscreen
         (set count (+ count 1))))
     (<= count limit))
 
@@ -321,7 +321,7 @@ char.
       (local target (. targets i))
       (when target
         (local i* (- i skipped))  ; label idx
-        (if target.offscreen? (set skipped (inc skipped))
+        (if target.is_offscreen (set skipped (inc skipped))
           (case (% i* |labels|)
             0 (do
                 (set target.label (. labels |labels|))
@@ -629,8 +629,9 @@ char.
   (fn get-targets [pattern in1 ?in2]
     (let [errmsg (if in1 (.. "not found: " in1 (or ?in2 "")) "no targets")
           search (require :leap.search)
-          kwargs {: backward? : windows : offset : op-mode? : inputlen}
-          targets (search.get-targets pattern kwargs)]
+          kwargs {:is_backward backward? : windows : offset
+                  :is_op_mode op-mode? : inputlen}
+          targets (search.get_targets pattern kwargs)]
       (or targets (set st.errmsg errmsg))))
 
   (fn get-user-given-targets [targets]

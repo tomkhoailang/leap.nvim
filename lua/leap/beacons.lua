@@ -27,7 +27,7 @@ end
 
 local function get_label_offset(target)
    return target.chars[1]:len()
-      + (target['win-edge?'] and 0 or target.chars[2]:len())
+      + (target.is_at_win_edge and 0 or target.chars[2]:len())
 end
 
 local function set_beacon_for_labeled(target, group_offset, phase)
@@ -75,12 +75,12 @@ function M.set_beacons(targets, kwargs)
    else
       for _, target in ipairs(targets) do
          if target.label then
-            if (phase ~= 1) or target['previewable?'] then
+            if phase ~= 1 or target.is_previewable then
                set_beacon_for_labeled(target, group_offset, phase)
             end
          elseif
             phase == 1
-            and target['previewable?']
+            and target.is_previewable
             and opts.highlight_unlabeled_phase_one_targets
          then
             set_beacon_to_match_hl(target)
