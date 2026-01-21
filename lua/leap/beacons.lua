@@ -57,8 +57,8 @@ local function set_beacon_for_labeled(target, group_offset, phase)
 end
 
 function M.set_beacons(targets, kwargs)
-   local group_offset = kwargs['group-offset']
-   local use_no_labels = kwargs['use-no-labels?']
+   local group_offset = kwargs.group_offset
+   local use_no_labels = kwargs.use_no_labels
    local phase = kwargs.phase
 
    if use_no_labels then
