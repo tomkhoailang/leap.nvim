@@ -49,14 +49,7 @@ See |leap-features| for lots of additional details.
 ==============================================================================
 MAPPINGS                                                         *leap-mappings*
 
-Leap defines some <Plug> keys aliasing calls to |leap.leap()|. E.g.,
-`<Plug>(leap-backward)` is a synonym for: >lua
-    function () require('leap').leap { backward = true } end
-
-To create custom motions, simply call `leap()` with your preferred arguments
-instead.
-
-Available <Plug> keys ~
+Leap provides some predefined <Plug> keys, aliasing calls to |leap.leap()|:
 
     Key                         |  Search scope    |  Offset  |  |inclusive|
     ----------------------------|------------------|----------|-------------
@@ -68,7 +61,11 @@ Available <Plug> keys ~
     *<Plug>(leap-from-window)*    |  Other windows   |          |
     *<Plug>(leap-anywhere)*       |  All windows     |          |
 
-   See also |leap-target-ordering|.
+   See also: |leap-target-ordering|.
+
+To create custom motions, simply call `leap()` with your preferred arguments
+instead. E.g., `<Plug>(leap-backward)` is a synonym for: >lua
+    function () require('leap').leap { backward = true } end
 
 Suggested arrangements ~
 

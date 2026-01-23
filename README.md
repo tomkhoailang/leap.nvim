@@ -7,19 +7,6 @@ primarily on [vim-sneak](https://github.com/justinmk/vim-sneak). Using some
 clever ideas, it allows you to jump to any position in the visible editor area
 very quickly, with near-zero mental overhead.
 
-### Features
-
-* Previewing target labels while typing, for smoother jumps
-* Safe automatic jump to the first match (no need to press `<enter>`)
-* No blind spots - even empty lines are reachable with the same command
-* Multi-window search
-* Consistent, intuitive way to traverse matches and repeat motions
-* Native feel (`forced-motion`, `.`-repeat)
-* Friendly to non-English languages (`'keymap'`, mutual aliases)
-* Treesitter integration
-* Bundled module for remote operations ("spooky actions at a distance")
-* Small API surface, yet highly extensible
-
 <p align="center">
   <img src="../media/showcase.gif?raw=true" alt="Leap in action"/>
 </p>
@@ -30,12 +17,12 @@ very quickly, with near-zero mental overhead.
   (`{char1}{char2}`). To target the last character on a line, type
   `{char}<space>`. To target an empty line, type `<space><space>`.
 
-* After typing `{char1}`, you see "labels" appearing next to some pairs. This
-  is just a **preview** - labels only get active after finishing the pattern.
+* After typing `{char1}`, you see "labels" appearing next to some pairs. **This
+  is just a preview** - labels only get active after finishing the pattern.
 
 * Type `{char2}`, which filters the matches. When the closest pair is
-  unlabeled, you automatically jump there. In case that was your target, you
-  can safely ignore the remaining labels - those will not conflict with any
+  unlabeled, you **automatically jump there**. In case that was your target,
+  you can safely ignore the remaining labels - those will not conflict with any
   sensible command, and will disappear on the next keypress.
 
 * Else: type the label character to jump to the given position. If there are
@@ -123,8 +110,8 @@ See below for more (e.g. setting up automatic paste after yanking).
 
 ```lua
 -- Highly recommended: define a preview filter to reduce visual noise
--- and the blinking effect after the first keypress (see
--- `:h leap.opts.preview`).
+-- and the blinking effect after the first keypress
+-- (see `:h leap.opts.preview`).
 -- For example, skip preview if the first character of the match is
 -- whitespace or is in the middle of an alphabetic word:
 require('leap').opts.preview = function (ch0, ch1, ch2)
