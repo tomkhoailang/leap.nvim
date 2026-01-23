@@ -47,60 +47,6 @@ local plug_mappings = {
       '<Plug>(leap-backward-till)',
       function () require('leap').leap { backward = true, offset = 1 } end
    },
-
-   -- Deprecated
-   {
-      { 'n', 'x', 'o' },
-      '<Plug>(leap-forward-to)',
-      function ()
-         local msg = ('leap.nvim: <Plug>(leap-forward-to) is deprecated. '
-                      .. 'See `:help leap-mappings` to update your config.')
-         vim.notify(msg, vim.log.levels.WARN)
-         require('leap').leap { inclusive = true }
-      end
-   },
-   {
-      { 'n', 'x', 'o' },
-      '<Plug>(leap-backward-to)',
-      function ()
-         local msg = ('leap.nvim: <Plug>(leap-backward-to) is deprecated. '
-                      .. 'See `:help leap-mappings` to update your config.')
-         vim.notify(msg, vim.log.levels.WARN)
-         require('leap').leap { backward = true }
-      end
-   },
-   {
-      { 'n', 'x', 'o' },
-      '<Plug>(leap-cross-window)',
-      function ()
-         local msg = ('leap.nvim: <Plug>(leap-cross-window) is deprecated. '
-                      .. 'See `:help leap-mappings` to update your config.')
-         vim.notify(msg, vim.log.levels.WARN)
-         require('leap').leap {
-            windows = require('leap.util').get_enterable_windows()
-         }
-      end
-   },
-   {
-      { 'n', 'x', 'o' },
-      '<Plug>(leap-forward-x)',
-      function ()
-         local msg = ('leap.nvim: <Plug>(leap-forward-x) is deprecated. '
-                      .. 'See `:help leap-mappings` to update your config.')
-         vim.notify(msg, vim.log.levels.WARN)
-         require('leap').leap { offset = 1, inclusive = true }
-      end
-   },
-   {
-      { 'n', 'x', 'o' },
-      '<Plug>(leap-backward-x)',
-      function ()
-         local msg = ('leap.nvim: <Plug>(leap-backward-x) is deprecated. '
-                      .. 'See `:help leap-mappings` to update your config.')
-         vim.notify(msg, vim.log.levels.WARN)
-         require('leap').leap { backward = true, offset = 2 }
-      end
-   },
 }
 
 
