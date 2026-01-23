@@ -609,12 +609,16 @@ local function leap(kwargs)
       api.nvim_exec_autocmds('User', { pattern = pattern, modeline = false })
    end
 
-   local function exit()
-      exec_user_autocmds('LeapLeave')
+   local exit
+   do
+     local exited
+     exit = function()
+        exec_user_autocmds('LeapLeave')
+        assert(not exited)
+        exited = true
+     end
    end
 
-   -- Be sure not to call this twice accidentally,
-   -- `handle_interrupted_change_op()` moves the cursor.
    local function exit_early()
       if is_change_op then handle_interrupted_change_op() end
       if st.errmsg then echo(st.errmsg) end
