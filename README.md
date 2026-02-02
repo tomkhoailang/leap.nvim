@@ -17,14 +17,13 @@ very quickly, with near-zero mental overhead.
   **They are not active yet, but this preview allows you to process them in the
   background**.
 
-* Type `{char2}`, which filters the matches. When the closest pair is
-  unlabeled, you automatically jump there. If that was your target, you can
-  safely ignore the remaining labels - those will not conflict with any
-  sensible command, and will disappear on the next keypress.
+* Typing `{char2}` filters the matches. When the closest one is unlabeled, you
+  automatically jump there. If that was your target, you can safely ignore the
+  remaining labels - those will not conflict with any sensible command, and
+  will disappear on the next keypress.
 
-* Else: type the label character to jump to the given position. If there are
-  more matches than available labels, you can move between groups with
-  `<space>` and `<backspace>`.
+* Else: type the label character to jump. If there are more matches than
+  available labels, use `<space>` and `<backspace>` to move between groups.
 
 At any stage, `<enter>` is a shortcut, jumping to the next/closest available
 target: pressing `<enter>` right away repeats the previous search;
