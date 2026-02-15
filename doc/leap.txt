@@ -323,8 +323,24 @@ Note: <esc> is hardcoded to exit Leap at any stage cleanly.
 Temporary |options| to be set on |LeapEnter|, and restored to their original
 value upon |LeapLeave|. The keys should follow the above pattern, the prefix
 corresponding to |vim.wo|, |vim.bo|, or |vim.go|.
-Example - turning off |hlsearch| while leaping: >lua
-    require('leap').opts.vim_opts['go.hlsearch'] = false
+
+Example: >lua
+    local vim_opts = require('leap').opts.vim_opts
+    vim_opts['go.hlsearch'] = false
+    -- The right-hand side can also be a function that evaluates to the
+    -- desired value. The window or buffer id will be passed as argument
+    -- for the corresponding scopes.
+    vim_opts['wo.conceallevel'] = function(win)
+      local buf = vim.fn.winbufnr(win)
+      if
+        vim.bo[buf].buftype == 'help'
+        or vim.fn.bufname(buf):match('^oil:///')  -- oil.nvim buffers
+      then
+        return vim.wo[win].conceallevel  -- keep the current value
+      else
+        return 0
+      end
+    end
 <
 ==============================================================================
 HIGHLIGHTING                                                    *leap-highlight*
