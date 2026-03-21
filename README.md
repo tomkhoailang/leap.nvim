@@ -91,8 +91,8 @@ vim.keymap.set({'x', 'o'}, 'R',  function()
 end)
 ```
 
-Remote operations (`gs{leap}apy` or `ygs{leap}ap`, where `{leap}` means
-`{char1}{char2}{label?}`, as usual):
+Remote operations (`gs{leap}apy` or `ygs{leap}ap`, where `{leap}` means, as
+usual, `{char1}{char2}{label?}`):
 
 ```lua
 vim.keymap.set({'n', 'o'}, 'gs', function()
@@ -112,10 +112,10 @@ See below for more (e.g. setting up automatic paste after yanking).
 
 ```lua
 -- Highly recommended: define a preview filter to reduce visual noise
--- and the blinking effect after the first keypress
--- (see `:h leap.opts.preview`).
--- For example, skip preview if the first character of the match is
--- whitespace or is in the middle of an alphabetic word:
+-- and the blinking effect after the first keypress.
+-- The below one skips preview for matches starting with whitespace or
+-- mid-word alphabetic characters: foobar[baaz] = quux
+--                                 *    ***  ** * *  *
 require('leap').opts.preview = function(ch0, ch1, ch2)
   return not (
     ch1:match('%s')
@@ -131,7 +131,7 @@ require('leap').opts.equivalence_classes = { ' \t\r\n', '([{', ')]}', '\'"`' }
 -- explicitly invoking Leap:
 require('leap.user').set_repeat_keys('<enter>', '<backspace>')
 
--- Automatic paste after remote yank operations:
+-- Set automatic paste after remote yank operations:
 vim.api.nvim_create_autocmd('User', {
   pattern = 'RemoteOperationDone',
   group = vim.api.nvim_create_augroup('LeapRemote', {}),
