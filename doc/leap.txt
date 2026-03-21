@@ -225,14 +225,13 @@ Example configuration: >lua
     name it), but keep in mind that this function will be called for every
     single match, so efficiency is something to consider.
 
-                      *leap-equivalence-class* *leap.opts.equivalence_classes*
-`equivalence_classes = { ' \t\r\n' }`
-
+                                               *leap.opts.equivalence_classes*
+`equivalence_classes =` >
+    { ' \t\r\n', '([{', ')]}', '\'"`' }
+<
     Mutual alias groups for input characters: members will match any other in
     their equivalence class. Can be strings or tables.
-    Example - whitespace, brackets, and quotes: >lua
-        { ' \t\r\n', '([{', ')]}', '\'"`' }
-<
+
     Note: Non-mutual aliases (wildcard characters), at least ones that work
     for the whole pattern, are not possible in Leap, because we cannot read
     your mind after the first input, and decide on which label to show for
