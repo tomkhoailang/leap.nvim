@@ -27,6 +27,7 @@ local function with_traversal_keys(fwd_key, bwd_key, opts)
    })
 end
 
+--- @deprecated
 local function set_repeat_keys(fwd_key, bwd_key, kwargs)
    kwargs = kwargs or {}
    local modes = kwargs.modes or { 'n', 'x', 'o' }
@@ -189,11 +190,11 @@ end
 
 return {
    with_traversal_keys = with_traversal_keys,
-   set_repeat_keys = set_repeat_keys,
    get_enterable_windows = get_enterable_windows,
    get_focusable_windows = get_focusable_windows,
    set_backdrop_highlight = set_backdrop_highlight,
    -- deprecated --
+   set_repeat_keys = set_repeat_keys,
    add_repeat_mappings = set_repeat_keys,
    add_default_mappings = add_default_mappings,
    setup = setup,

@@ -125,7 +125,21 @@ end
 
 -- Use the traversal keys to repeat the previous motion without
 -- explicitly invoking Leap:
-require('leap.user').set_repeat_keys('<enter>', '<backspace>')
+do
+  local clever = require('leap.user').with_traversal_keys
+  -- For relative directions, set `backward` according to:
+  -- local prev_backward = require('leap').state['repeat'].backward
+  vim.keymap.set({ 'n', 'x', 'o' }, '<cr>', function ()
+    require('leap').leap {
+      ['repeat'] = true, opts = clever('<cr>', '<bs>'),
+    }
+  end)
+  vim.keymap.set({ 'n', 'x', 'o' }, '<bs>', function ()
+    require('leap').leap {
+      ['repeat'] = true, backward = true, opts = clever('<bs>', '<cr>'),
+    }
+  end)
+end
 
 -- Set automatic paste after remote yank operations:
 vim.api.nvim_create_autocmd('User', {

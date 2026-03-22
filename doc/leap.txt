@@ -177,15 +177,24 @@ next/closest available target:
   etc.). If you overshoot, <backspace> (|leap.opts.keys.prev_target|) steps
   back. *leap-traversal*
 
-There is a convenience function in the `user` module to set keys to repeat the
-previous search without explicitly invoking Leap (`<enter><enter>...` instead
-of `s<enter><enter>...`): >lua
-    require('leap.user').set_repeat_keys('<enter>', '<backspace>', {
-      -- When true, repeat in the direction of the last motion
-      -- (by default, <cr>/<bs> always goes forward/backward).
-      relative_directions = false,
-      modes = {'n', 'x', 'o'},
-    })
+It is worth enabling the traversal keys to repeat the previous search without
+explicitly invoking Leap (`<enter><enter>...` instead of
+`s<enter><enter>...`): >lua
+    do
+      local clever = require('leap.user').with_traversal_keys
+      -- For relative directions, set `backward` according to:
+      -- local prev_backward = require('leap').state['repeat'].backward
+      vim.keymap.set({ 'n', 'x', 'o' }, '<cr>', function ()
+        require('leap').leap {
+          ['repeat'] = true, opts = clever('<cr>', '<bs>'),
+        }
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, '<bs>', function ()
+        require('leap').leap {
+          ['repeat'] = true, backward = true, opts = clever('<bs>', '<cr>'),
+        }
+      end)
+    end
 <
 Operations can be repeated with |.|, if vim-repeat
 (https://github.com/tpope/vim-repeat) is installed. Dot-repeat works as you
@@ -404,6 +413,8 @@ leap({opts})                                                     *leap.leap()*
                  cursor compared to the target position.
                • {inclusive}? (`boolean`, default: `false`) Make operations
                  |inclusive| for forward jumps.
+               • {repeat}? (`boolean`, default: `false`) Leap again with the
+                 previous inputs and arguments.
                • {opts}? (`table`) A table like |leap.opts|, to override any
                  default setting for the specific call. Example: >lua
                     require('leap').leap { opts = { safe_labels = '' } }
