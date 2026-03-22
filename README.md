@@ -50,7 +50,10 @@ At the same time, it reduces mental effort by all possible means:
 
 ### Showcase
 
-This efficient mode of navigation allows building interesting features on top of it. "Text editing at the speed of thought" has become a bit of an inflated phrase in the Vim world, but cloning an arbitrary syntax tree node from an arbitrary window with eight keystrokes speaks for itself:
+This efficient mode of navigation allows building interesting features on top
+of it. "Text editing at the speed of thought" has become a bit of an inflated
+phrase in the Vim world, but cloning an arbitrary syntax tree node from an
+arbitrary window with eight keystrokes speaks for itself:
 
 <figure>
     <img src="../media/showcase.gif?raw=true" width="80%" alt="Leap in action" title="Leap in action" />
@@ -91,8 +94,8 @@ vim.keymap.set({'x', 'o'}, 'R',  function()
 end)
 ```
 
-Remote operations (`gs{leap}apy` or `ygs{leap}ap`, where `{leap}` means, as
-usual, `{char1}{char2}{label?}`):
+Remote operations (`gs{leap}apy` or `ygs{leap}ap`, where `{leap}`, as usual,
+means `{char1}{char2}{label?}`):
 
 ```lua
 vim.keymap.set({'n', 'o'}, 'gs', function()
@@ -113,9 +116,10 @@ See below for more (e.g. setting up automatic paste after yanking).
 ```lua
 -- Highly recommended: define a preview filter to reduce visual noise
 -- and the blinking effect after the first keypress.
--- The below one skips preview for matches starting with whitespace or
--- mid-word alphabetic characters: foobar[baaz] = quux
---                                 *    ***  ** * *  *
+-- For example, define word boundaries as the common case, that is, skip
+-- preview for matches starting with whitespace or an alphabetic
+-- mid-word character: foobar[baaz] = quux
+--                     *    ***  ** * *  *
 require('leap').opts.preview = function(ch0, ch1, ch2)
   return not (
     ch1:match('%s')
@@ -123,20 +127,20 @@ require('leap').opts.preview = function(ch0, ch1, ch2)
   )
 end
 
--- Use the traversal keys to repeat the previous motion without
--- explicitly invoking Leap:
+-- Enable the traversal keys to repeat the previous search without
+-- explicitly invoking Leap (`<cr><cr>...` instead of `s<cr><cr>...`):
 do
   local clever = require('leap.user').with_traversal_keys
-  -- For relative directions, set `backward` according to:
+  -- For relative directions, set the `backward` flags according to:
   -- local prev_backward = require('leap').state['repeat'].backward
-  vim.keymap.set({ 'n', 'x', 'o' }, '<cr>', function ()
+  vim.keymap.set({ 'n', 'x', 'o' }, '<cr>', function()
     require('leap').leap {
       ['repeat'] = true, opts = clever('<cr>', '<bs>'),
     }
   end)
-  vim.keymap.set({ 'n', 'x', 'o' }, '<bs>', function ()
+  vim.keymap.set({ 'n', 'x', 'o' }, '<bs>', function()
     require('leap').leap {
-      ['repeat'] = true, backward = true, opts = clever('<bs>', '<cr>'),
+      ['repeat'] = true, opts = clever('<bs>', '<cr>'), backward = true,
     }
   end)
 end
@@ -582,6 +586,16 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 </details>
 
 ### Miscellaneous
+
+<details>
+<summary>Mappings for surround plugins</summary>
+
+If `s` and `S` are used by Leap, I suggest either `gz` or `gm` as the prefix
+for surround commands (e.g.: `gz{motion}`, `gzz`, `gzd`, `gzr`, etc.). Even if
+unused in itself, `gs` is not an ideal choice, because `gss` cannot be mapped
+to linewise surround then.
+
+</details>
 
 <details>
 <summary>Was the name inspired by Jef Raskin's Leap?</summary>
