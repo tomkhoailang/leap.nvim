@@ -454,7 +454,7 @@ characters together as mutual aliases, e.g.:
 </details>
 
 <details>
-<summary>Disable auto-jumping to the first match</summary>
+<summary>Disable autojumping to the first match</summary>
 
 ```lua
 require('leap').opts.safe_labels = ''
@@ -463,7 +463,7 @@ require('leap').opts.safe_labels = ''
 </details>
 
 <details>
-<summary>Force auto-jumping to the first match</summary>
+<summary>Force autojumping to the first match</summary>
 
 ```lua
 require('leap').opts.labels = ''
@@ -638,7 +638,7 @@ vim.api.nvim_create_autocmd('CmdlineLeave', {
       -- Allow CmdLineLeave-related chores to be completed before
       -- invoking Leap.
       vim.schedule(function()
-        -- We want "safe" labels, but no auto-jump (as the search
+        -- We want "safe" labels, but no autojump (as the search
         -- command already does that), so just use `safe_labels`
         -- as `labels`, with n/N removed.
         local labels = require('leap').opts.safe_labels:gsub('[nN]', '')
