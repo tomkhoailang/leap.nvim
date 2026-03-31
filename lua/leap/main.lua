@@ -349,7 +349,6 @@ local function prepare_labeled_targets(targets, kwargs)
          -- mention that the jump itself is disorienting, especially
          -- A->B->C (autojumping to B, before moving to C).
          or multi_windows and not all_in_the_same_window(targets)
-         or cursor_would_cover_the_first_label_on_autojump(targets)
       ) then
          -- Forced or "smart" autojump, respectively.
          targets.autojump = (#labels == 0)
